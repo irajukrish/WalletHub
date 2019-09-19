@@ -10,3 +10,5 @@ Run Facebook/Wallethub tests with TestNG OR use testng.xml
 
 selenium-java 3.141.59
 testng 6.14.3
+
+
