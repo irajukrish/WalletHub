@@ -16,79 +16,81 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.qa.base.BasePage;
 import com.qa.base.Page;
 
 public class BaseTest {
-
+	
 	WebDriver driver;
 	WebDriverWait wait;
 	public Page page;
 	public Properties prop;
-
+	
+	
 	@BeforeMethod
 	public void setUp() {
-
+		
 		try {
-
-//		if (browser.equalsIgnoreCase("chrome")) {
-//			System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\chromedriver.exe");
-//			driver = new ChromeDriver();
-//			} 
-//		else if (browser.equalsIgnoreCase("firefox")) {
-//			driver = new FirefoxDriver();
-//			}
-
+			
+			  
+		String browser=prop.getProperty("browser");
+		
+		if (browser.equalsIgnoreCase("chrome")) {
 			Map<String, Object> prefs = new HashMap<String, Object>();
 			prefs.put("profile.default_content_setting_values.notifications", 2);
 			ChromeOptions options = new ChromeOptions();
 			options.setExperimentalOption("prefs", prefs);
-			System.setProperty("webdriver.chrome.driver", "Driver\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\chromedriver\\chromedriver.exe");
 			driver = new ChromeDriver(options);
-
-			driver.manage().window().maximize();
-
-			driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-
-			driver.get("https://www.facebook.com/");
-			page = new BasePage(driver, wait);
-		}
-
-		catch (NoSuchElementException e) {
-			System.out.println("Error NoSuchElementException");
-		} 
+			} 
+		else if (browser.equalsIgnoreCase("firefox")) {
+			driver = new FirefoxDriver();
+			}
 		
-		catch (Exception e) {
+		driver.manage().window().maximize();
+		
+		driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+		
+		//driver.get("https://www.facebook.com/");
+		
+		driver.get(prop.getProperty("FBURL"));		
+		page=new BasePage(driver, wait);
+		}
+		
+		catch(NoSuchElementException e) {
+			System.out.println("Error NoSuchElementException");
+		}
+		catch(Exception e) {
 			System.out.println("Error Exception" + e);
 		}
-
+				
 	}
 
 	@AfterMethod
 	public void tearDown() {
-
-		driver.quit();
+		//driver.quit();
 	}
-
+	
+	@BeforeTest
 	public Properties initialize_properties() {
 
 		prop = new Properties();
 
 		try {
-			FileInputStream ip = new FileInputStream(
-					System.getProperty("user.dir") + "/src/main/java/config/qa/hubspot/config/config.properties");
+			FileInputStream ip = new FileInputStream(System.getProperty("user.dir") + "\\Configs\\config.properties");
 			prop.load(ip);
 		} catch (FileNotFoundException e) {
+			System.out.println("File Not Found Error");
 			e.printStackTrace();
 		} catch (IOException e) {
+			System.out.println("Error in the code");
 			e.printStackTrace();
 		}
 
 		return prop;
 	}
+
 
 }
