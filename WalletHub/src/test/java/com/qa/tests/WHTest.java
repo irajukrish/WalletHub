@@ -17,7 +17,8 @@ public class WHTest extends BaseTestWH {
 	public void WH() throws InterruptedException {
 
 		// Please Don't share this Credentials with anyone
-		page.getInstance(WHLoginPage.class).doLogin(WHUsername, WHPassword);
+		//page.getInstance(WHLoginPage.class).doLogin(WHUsername, WHPassword);
+		page.getInstance(WHLoginPage.class).doLogin(prop.getProperty("WHUsername"), prop.getProperty("WHPassword"));
 
 		// Rating is done by hover and clicking
 		page.getInstance(InsuranceCompanyPage.class).Review();
