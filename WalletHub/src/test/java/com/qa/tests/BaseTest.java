@@ -42,7 +42,7 @@ public class BaseTest {
 			prefs.put("profile.default_content_setting_values.notifications", 2);
 			ChromeOptions options = new ChromeOptions();
 			options.setExperimentalOption("prefs", prefs);
-			System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\chromedriver\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "Driver\\chromedriver.exe");
 			driver = new ChromeDriver(options);
 			} 
 		else if (browser.equalsIgnoreCase("firefox")) {
