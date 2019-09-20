@@ -16,6 +16,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 
 import com.qa.base.BasePage;
 import com.qa.base.Page;
@@ -27,36 +28,35 @@ public class BaseTestWH {
 	public Page page;
 	public Properties prop;
 	public static String flash;
-	String URL="http://wallethub.com/profile/test_insurance_company/";
 	
 	@BeforeMethod
 	public void setUp() {
 		
 		try {
-//		Properties obj = new Properties();					
-//	    FileInputStream objfile = new FileInputStream(System.getProperty("user.dir")+"\\config.properties");									
-//	    obj.load(objfile);
-//		String browser=obj.getProperty("browser");
-//		
-//		if (browser.equalsIgnoreCase("chrome")) {
-//			System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\chromedriver.exe");
-//			driver = new ChromeDriver();
-//			} 
-//		else if (browser.equalsIgnoreCase("firefox")) {
-//			driver = new FirefoxDriver();
-//			}
+
+			String browser=prop.getProperty("browser");
+			
+			if (browser.equalsIgnoreCase("chrome")) {
+				Map<String, Object> prefs = new HashMap<String, Object>();
+				prefs.put("profile.default_content_setting_values.notifications", 2);
+				ChromeOptions options = new ChromeOptions();
+				options.setExperimentalOption("prefs", prefs);
+				System.setProperty("webdriver.chrome.driver", "Driver\\chromedriver.exe");
+				driver = new ChromeDriver(options);
+				} 
+			else if (browser.equalsIgnoreCase("firefox")) {
+				driver = new FirefoxDriver();
+				}
 		
-		
-		System.setProperty("webdriver.chrome.driver", "Driver\\chromedriver.exe");
-		
-		driver = new ChromeDriver();
+			
 		
 		driver.manage().window().maximize();
 		
 		driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
 		
-		driver.get(URL);
-				
+		//driver.get("http://wallethub.com/profile/test_insurance_company/");
+		
+		driver.get(prop.getProperty("WHURL"));		
 		page=new BasePage(driver, wait);
 		}
 		
@@ -65,11 +65,7 @@ public class BaseTestWH {
 		}
 		catch(Exception e) {
 			System.out.println("Error Exception" + e);
-		}
-		
-		
-		
-		
+		}	
 		
 	}
 
@@ -77,6 +73,27 @@ public class BaseTestWH {
 	public void tearDown() {
 		driver.quit();
 	}
+	
+	@BeforeTest
+	public Properties initialize_properties() {
+
+		prop = new Properties();
+
+		try {
+			FileInputStream ip = new FileInputStream(System.getProperty("user.dir") + "\\Configs\\config.properties");
+			prop.load(ip);
+		} catch (FileNotFoundException e) {
+			System.out.println("File Not Found Error");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Error in the code");
+			e.printStackTrace();
+		}
+
+		return prop;
+	}
+	
+	
 
 
 }
