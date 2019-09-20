@@ -17,7 +17,8 @@ public class FBTest extends BaseTest {
 	public void FB() throws InterruptedException {
 		
 		//Please Don't share this Credentials with anyone
-		page.getInstance(FBLoginPage.class).doLogin(FBUserName, FBPassword);
+		//page.getInstance(FBLoginPage.class).doLogin(FBUserName, FBPassword);
+		page.getInstance(FBLoginPage.class).doLogin(prop.getProperty("FBUsername"), prop.getProperty("FBPassword"));
 		
 		//Add Status Hello world
 		page.getInstance(FBHomePage.class).AddStatus();
